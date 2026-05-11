@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUM LAB — Innovation Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --white:   #F7F4EE;
+  --chalk:   #EFEBE2;
+  --charcoal:#1C1B18;
+  --sand:    #DDD5C4;
+  --sand-mid:#C8BC9F;
+  --grey:    #8A8578;
+  --pink:    #E8366A;
+  --green:   #1A7A4A;
+  --orange:  #E05C1A;
+  --yellow:  #F0B800;
+  --nav-h:   72px;
+}
+
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  background:var(--white);
+  color:var(--charcoal);
+  font-family:'DM Sans',sans-serif;
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+  cursor:none;
+}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+
+/* ── CURSOR ── */
+#cursor{
+  width:10px;height:10px;
+  background:var(--pink);
+  border-radius:50%;
+  position:fixed;
+  top:0;left:0;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .12s ease,width .2s ease,height .2s ease,background .2s ease;
+  mix-blend-mode:multiply;
+}
+#cursor.hover{width:40px;height:40px;background:var(--pink);opacity:.5;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  z-index:100;
+  transition:background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(247,244,238,.92);
+  backdrop-filter:blur(12px);
+  border-bottom-color:var(--sand);
+}
+.nav-logo{
+  display:flex;align-items:baseline;gap:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:22px;
+  letter-spacing:-0.03em;
+  line-height:1;
+}
+.nav-logo .nl{font-weight:200;}
+.nav-logo .ns{font-weight:200;opacity:.3;margin:0 .16em;}
+.nav-logo .nb{font-weight:500;}
+.nav-logo .nd{
+  width:.18em;height:.18em;
+  border-radius:50%;
+  background:var(--pink);
+  display:inline-block;
+  margin-left:.05em;
+  position:relative;top:.06em;
+}
+.nav-links{
+  display:flex;gap:36px;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--grey);
+}
+.nav-links a{transition:color .2s;}
+.nav-links a:hover{color:var(--charcoal);}
+.nav-cta{
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:10px 24px;
+  background:var(--charcoal);
+  color:var(--white);
+  transition:background .2s,color .2s;
+}
+.nav-cta:hover{background:var(--pink);color:var(--white);}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;
+  background:var(--charcoal);
+  display:grid;
+  grid-template-rows:1fr auto;
+  padding:0 48px;
+  padding-top:var(--nav-h);
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg-word{
+  position:absolute;
+  right:-40px;bottom:-40px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(200px,30vw,520px);
+  letter-spacing:-0.07em;
+  line-height:1;
+  color:rgba(255,255,255,.03);
+  pointer-events:none;
+  white-space:nowrap;
+  user-select:none;
+}
+.hero-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:80px 0 60px;
+  max-width:900px;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:14px;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--sand-mid);
+  margin-bottom:48px;
+  opacity:0;
+  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .3s forwards;
+}
+.hero-eyebrow-line{width:32px;height:1px;background:var(--pink);}
+
+.hero-h1{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(52px,8vw,120px);
+  letter-spacing:-0.04em;
+  line-height:.95;
+  color:var(--white);
+  margin-bottom:40px;
+}
+.hero-h1 em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+  color:var(--sand);
+}
+.hero-h1 span.accent{color:var(--pink);}
+
+.hero-h1-line{
+  display:block;
+  opacity:0;
+  transform:translateY(32px);
+}
+.hero-h1-line:nth-child(1){animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .4s forwards;}
+.hero-h1-line:nth-child(2){animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .55s forwards;}
+.hero-h1-line:nth-child(3){animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .7s forwards;}
+
+.hero-sub{
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(15px,1.4vw,18px);
+  color:var(--sand-mid);
+  max-width:500px;
+  line-height:1.65;
+  margin-bottom:56px;
+  opacity:0;
+  animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .9s forwards;
+}
+.hero-actions{
+  display:flex;gap:16px;align-items:center;
+  opacity:0;
+  animation:fadeUp .9s cubic-bezier(.16,1,.3,1) 1.05s forwards;
+}
+.btn-primary{
+  padding:14px 32px;
+  background:var(--pink);
+  color:var(--white);
+  font-size:13px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:background .2s,transform .15s;
+  display:inline-block;
+}
+.btn-primary:hover{background:#cc2458;transform:translateY(-2px);}
+.btn-ghost{
+  padding:14px 32px;
+  border:1px solid rgba(255,255,255,.2);
+  color:var(--sand);
+  font-size:13px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:var(--sand);color:var(--white);}
+
+.hero-footer{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:32px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  opacity:0;
+  animation:fadeUp .8s cubic-bezier(.16,1,.3,1) 1.3s forwards;
+}
+.hero-stat{display:flex;flex-direction:column;gap:4px;}
+.hero-stat-n{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:36px;
+  letter-spacing:-0.04em;
+  color:var(--white);
+}
+.hero-stat-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);}
+.hero-scroll{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grey);
+  display:flex;align-items:center;gap:10px;
+}
+.hero-scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,transparent,var(--grey));
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%,100%{transform:scaleY(1);opacity:1;}
+  50%{transform:scaleY(.6);opacity:.5;}
+}
+
+/* ── MARQUEE ── */
+.marquee-wrap{
+  background:var(--pink);
+  padding:14px 0;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.marquee-track{
+  display:inline-flex;
+  animation:marquee 24s linear infinite;
+}
+.marquee-track span{
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--white);
+  margin:0 32px;
+}
+.marquee-track .dot{
+  width:4px;height:4px;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+  display:inline-block;
+  vertical-align:middle;
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTIONS COMMON ── */
+section{padding:120px 48px;}
+.section-label{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--grey);margin-bottom:56px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-label::before{
+  content:'';display:inline-block;
+  width:24px;height:1px;background:var(--pink);
+}
+.section-h{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(36px,5vw,72px);
+  letter-spacing:-0.03em;
+  line-height:1.05;
+  color:var(--charcoal);
+}
+.section-h em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+}
+
+/* ── PROBLEM ── */
+#problem{background:var(--chalk);}
+.problem-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+  margin-top:80px;
+}
+.problem-quote{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:clamp(28px,3vw,44px);
+  line-height:1.25;
+  color:var(--charcoal);
+}
+.problem-quote mark{
+  background:none;
+  color:var(--pink);
+}
+.problem-items{display:flex;flex-direction:column;gap:0;}
+.problem-item{
+  padding:28px 0;
+  border-bottom:1px solid var(--sand);
+  display:flex;gap:20px;align-items:flex-start;
+}
+.problem-item:first-child{border-top:1px solid var(--sand);}
+.problem-n{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:32px;
+  letter-spacing:-0.04em;
+  color:var(--sand-mid);
+  line-height:1;
+  flex-shrink:0;
+  width:40px;
+}
+.problem-text{
+  font-size:15px;
+  color:var(--charcoal);
+  line-height:1.55;
+}
+.problem-text strong{font-weight:500;}
+
+/* ── SERVICES ── */
+#services{background:var(--white);}
+.services-intro{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:end;
+  margin-bottom:80px;
+}
+.services-desc{
+  font-size:16px;
+  color:var(--grey);
+  line-height:1.65;
+  max-width:400px;
+}
+.services-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+}
+.service-card{
+  padding:48px 40px;
+  background:var(--chalk);
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  transition:background .3s;
+  position:relative;
+  overflow:hidden;
+}
+.service-card::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;
+  width:0;height:2px;
+  background:var(--pink);
+  transition:width .4s cubic-bezier(.16,1,.3,1);
+}
+.service-card:hover{background:var(--charcoal);}
+.service-card:hover::after{width:100%;}
+.service-card:hover .service-n,
+.service-card:hover .service-title,
+.service-card:hover .service-text{color:var(--white);}
+.service-card:hover .service-tags span{
+  border-color:rgba(255,255,255,.2);
+  color:var(--sand-mid);
+}
+
+.service-n{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--grey);
+  transition:color .3s;
+}
+.service-title{
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  font-size:clamp(22px,2.2vw,30px);
+  letter-spacing:-0.02em;
+  line-height:1.1;
+  color:var(--charcoal);
+  transition:color .3s;
+}
+.service-text{
+  font-size:14px;color:var(--grey);line-height:1.6;
+  transition:color .3s;
+}
+.service-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;}
+.service-tags span{
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 10px;
+  border:1px solid var(--sand);
+  color:var(--grey);
+  transition:border-color .3s,color .3s;
+}
+
+/* ── HOW ── */
+#how{background:var(--charcoal);}
+#how .section-label{color:var(--sand-mid);}
+#how .section-label::before{background:var(--pink);}
+#how .section-h{color:var(--white);}
+#how .section-h em{color:var(--sand);}
+.how-steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:2px;
+  margin-top:80px;
+}
+.how-step{
+  padding:48px 32px;
+  background:rgba(255,255,255,.04);
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  position:relative;
+}
+.how-step::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:rgba(255,255,255,.08);
+  transition:background .3s;
+}
+.how-step:hover::before{background:var(--pink);}
+.step-n{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;font-size:48px;
+  letter-spacing:-0.05em;line-height:1;
+  color:rgba(255,255,255,.12);
+}
+.step-title{
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;font-size:18px;
+  letter-spacing:-0.02em;
+  color:var(--white);
+  line-height:1.2;
+}
+.step-text{font-size:13px;color:var(--grey);line-height:1.6;}
+
+/* ── RESULTS / SOCIAL PROOF ── */
+#results{background:var(--white);}
+.results-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+  margin-top:80px;
+}
+.results-numbers{display:flex;flex-direction:column;gap:0;}
+.result-row{
+  display:flex;align-items:baseline;gap:24px;
+  padding:32px 0;
+  border-bottom:1px solid var(--sand);
+}
+.result-row:first-child{border-top:1px solid var(--sand);}
+.result-n{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(48px,6vw,80px);
+  letter-spacing:-0.05em;
+  line-height:1;
+  color:var(--charcoal);
+  flex-shrink:0;
+  width:180px;
+}
+.result-n .accent{color:var(--pink);}
+.result-desc{
+  font-size:14px;color:var(--grey);line-height:1.5;
+  max-width:280px;
+}
+.result-desc strong{color:var(--charcoal);font-weight:500;}
+
+.testimonial-stack{display:flex;flex-direction:column;gap:2px;}
+.testimonial{
+  padding:40px;
+  background:var(--chalk);
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.testimonial.featured{background:var(--charcoal);}
+.t-quote{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:clamp(18px,1.8vw,22px);
+  line-height:1.4;
+  color:var(--charcoal);
+}
+.testimonial.featured .t-quote{color:var(--white);}
+.t-source{
+  display:flex;align-items:center;gap:12px;
+  font-size:11px;letter-spacing:.08em;
+  color:var(--grey);
+}
+.t-avatar{
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;
+  color:var(--charcoal);
+  flex-shrink:0;
+}
+.testimonial.featured .t-avatar{background:rgba(255,255,255,.12);color:var(--white);}
+.testimonial.featured .t-source{color:var(--sand-mid);}
+.t-name{font-weight:500;color:var(--charcoal);}
+.testimonial.featured .t-name{color:var(--white);}
+
+/* ── ABOUT ── */
+#about{
+  background:var(--yellow);
+  padding:120px 48px;
+}
+.about-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.about-text-block .section-label{color:rgba(28,27,24,.45);}
+.about-text-block .section-label::before{background:var(--charcoal);}
+.about-h{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(36px,5vw,68px);
+  letter-spacing:-0.04em;
+  line-height:1.0;
+  color:var(--charcoal);
+  margin-bottom:32px;
+}
+.about-h em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+}
+.about-p{
+  font-size:15px;
+  color:rgba(28,27,24,.7);
+  line-height:1.7;
+  margin-bottom:16px;
+  max-width:420px;
+}
+.about-values{
+  display:flex;flex-direction:column;gap:0;
+  margin-top:48px;
+}
+.about-value{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:20px 0;
+  border-bottom:1px solid rgba(28,27,24,.15);
+}
+.about-value:first-child{border-top:1px solid rgba(28,27,24,.15);}
+.av-icon{
+  width:32px;height:32px;flex-shrink:0;
+  border:1px solid rgba(28,27,24,.2);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:2px;
+}
+.av-text{font-size:14px;color:rgba(28,27,24,.75);line-height:1.5;}
+.av-text strong{color:var(--charcoal);font-weight:500;}
+
+.about-visual{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.about-mark{
+  position:relative;
+  width:360px;height:360px;
+}
+
+/* ── CTA ── */
+#cta{
+  background:var(--charcoal);
+  padding:140px 48px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.cta-bg{
+  position:absolute;
+  inset:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+  opacity:.03;
+}
+.cta-h{
+  font-family:'DM Sans',sans-serif;
+  font-weight:200;
+  font-size:clamp(40px,7vw,100px);
+  letter-spacing:-0.04em;
+  line-height:.95;
+  color:var(--white);
+  margin-bottom:32px;
+  position:relative;
+  z-index:1;
+}
+.cta-h em{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:300;
+  color:var(--sand);
+}
+.cta-sub{
+  font-size:15px;
+  color:var(--sand-mid);
+  margin-bottom:56px;
+  max-width:440px;
+  margin-left:auto;margin-right:auto;
+  line-height:1.65;
+  position:relative;z-index:1;
+}
+.cta-form{
+  display:flex;
+  gap:0;
+  max-width:440px;
+  margin:0 auto;
+  position:relative;z-index:1;
+}
+.cta-input{
+  flex:1;
+  padding:16px 24px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-right:none;
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:border-color .2s;
+}
+.cta-input::placeholder{color:var(--grey);}
+.cta-input:focus{border-color:rgba(255,255,255,.3);}
+.cta-submit{
+  padding:16px 28px;
+  background:var(--pink);
+  color:var(--white);
+  border:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  cursor:none;
+  transition:background .2s;
+}
+.cta-submit:hover{background:#cc2458;}
+.cta-note{
+  margin-top:20px;
+  font-size:11px;
+  color:var(--grey);
+  letter-spacing:.04em;
+  position:relative;z-index:1;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--charcoal);
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:64px 48px 48px;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:48px;
+  margin-bottom:64px;
+}
+.footer-brand{grid-column:span 1;}
+.footer-logo{
+  display:flex;align-items:baseline;gap:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:22px;
+  letter-spacing:-0.03em;
+  margin-bottom:16px;
+}
+.footer-logo .nl{font-weight:200;color:var(--white);}
+.footer-logo .ns{font-weight:200;color:rgba(255,255,255,.2);margin:0 .16em;}
+.footer-logo .nb{font-weight:500;color:var(--white);}
+.footer-logo .nd{
+  width:.18em;height:.18em;border-radius:50%;
+  background:var(--pink);
+  display:inline-block;
+  margin-left:.05em;
+  position:relative;top:.06em;
+}
+.footer-desc{font-size:13px;color:var(--grey);line-height:1.6;max-width:200px;}
+.footer-col-title{
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--sand-mid);margin-bottom:20px;
+}
+.footer-links{display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:13px;color:var(--grey);transition:color .2s;}
+.footer-links a:hover{color:var(--white);}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding-top:28px;
+  font-size:11px;color:var(--grey);letter-spacing:.06em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+.reveal-delay-4{transition-delay:.4s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  .nav-links{display:none;}
+  section{padding:80px 24px;}
+  #hero{padding:0 24px;padding-top:var(--nav-h);}
+  .hero-footer{flex-direction:column;gap:24px;}
+  .problem-grid,.services-intro,.results-layout,.about-layout{
+    grid-template-columns:1fr;gap:40px;
+  }
+  .services-grid{grid-template-columns:1fr;}
+  .how-steps{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .footer-brand{grid-column:span 2;}
+  .cta-form{flex-direction:column;}
+  .cta-input{border-right:1px solid rgba(255,255,255,.12);border-bottom:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nl">LUM</span>
+    <span class="ns">/</span>
+    <span class="nb">LAB</span>
+    <span class="nd"></span>
+  </a>
+  <div class="nav-links">
+    <a href="#services">Servicios</a>
+    <a href="#how">Proceso</a>
+    <a href="#results">Resultados</a>
+    <a href="#about">Nosotros</a>
+  </div>
+  <a href="#cta" class="nav-cta">Hablemos</a>
+</nav>
+
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-word">LUMLAB</div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      Innovation Studio · CDMX
+    </div>
+
+    <h1 class="hero-h1">
+      <span class="hero-h1-line">Tecnología que</span>
+      <span class="hero-h1-line"><em>simplifica</em> tu</span>
+      <span class="hero-h1-line">negocio<span class="accent">.</span></span>
+    </h1>
+
+    <p class="hero-sub">
+      Ayudamos a empresas pequeñas y medianas a operar mejor — con automatización, herramientas digitales y adopción de IA que encajan con la forma en que tu equipo realmente trabaja.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">Agenda una llamada</a>
+      <a href="#services" class="btn-ghost">Ver servicios</a>
+    </div>
+  </div>
+
+  <div class="hero-footer">
+    <div class="hero-stat">
+      <div class="hero-stat-n">+80</div>
+      <div class="hero-stat-l">Empresas acompañadas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">3×</div>
+      <div class="hero-stat-l">Eficiencia promedio</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n">6 sem</div>
+      <div class="hero-stat-l">Para ver resultados</div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      Scroll
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MARQUEE ════════════════════════════════════════════════════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Automatización</span><span class="dot"></span>
+    <span>Inteligencia Artificial</span><span class="dot"></span>
+    <span>Herramientas Digitales</span><span class="dot"></span>
+    <span>Diagnóstico Operacional</span><span class="dot"></span>
+    <span>Workshops</span><span class="dot"></span>
+    <span>Implementación</span><span class="dot"></span>
+    <span>Acompañamiento</span><span class="dot"></span>
+    <span>Resultados Reales</span><span class="dot"></span>
+    <!-- duplicate for seamless loop -->
+    <span>Automatización</span><span class="dot"></span>
+    <span>Inteligencia Artificial</span><span class="dot"></span>
+    <span>Herramientas Digitales</span><span class="dot"></span>
+    <span>Diagnóstico Operacional</span><span class="dot"></span>
+    <span>Workshops</span><span class="dot"></span>
+    <span>Implementación</span><span class="dot"></span>
+    <span>Acompañamiento</span><span class="dot"></span>
+    <span>Resultados Reales</span><span class="dot"></span>
+  </div>
+</div>
+
+
+<!-- ══ PROBLEM ════════════════════════════════════════════════════════ -->
+<section id="problem">
+  <div class="section-label reveal">El contexto</div>
+
+  <div class="problem-grid">
+    <div class="reveal">
+      <p class="problem-quote">
+        Las PyMEs tienen los mismos retos que las grandes empresas, pero <mark>sin el equipo ni el presupuesto</mark> para enfrentarlos.
+      </p>
+    </div>
+
+    <div class="problem-items reveal reveal-delay-1">
+      <div class="problem-item">
+        <div class="problem-n">01</div>
+        <div class="problem-text">
+          <strong>Procesos manuales que consumen tiempo</strong> — tareas repetitivas que bloquean el crecimiento y desgastan al equipo.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-n">02</div>
+        <div class="problem-text">
+          <strong>Herramientas que no se hablan entre sí</strong> — datos dispersos, decisiones lentas, fricción constante.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-n">03</div>
+        <div class="problem-text">
+          <strong>La IA parece promesa, no solución</strong> — mucho ruido, pocas aplicaciones prácticas para tu operación.
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-n">04</div>
+        <div class="problem-text">
+          <strong>Consultoras que llegan, proponen y desaparecen</strong> — sin implementación real ni acompañamiento.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ SERVICES ═══════════════════════════════════════════════════════ -->
+<section id="services">
+  <div class="section-label reveal">Servicios</div>
+
+  <div class="services-intro">
+    <h2 class="section-h reveal">
+      Lo que<br>hacemos<br><em>contigo.</em>
+    </h2>
+    <p class="services-desc reveal reveal-delay-2">
+      No vendemos software. Diseñamos soluciones reales junto a tu equipo — desde el diagnóstico hasta que todo funciona, y después.
+    </p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-n">01</div>
+      <div class="service-title">Diagnóstico<br>Operacional</div>
+      <div class="service-text">Mapeamos tus procesos actuales e identificamos los cuellos de botella que más te cuestan. Entregamos un plan claro, priorizado y accionable.</div>
+      <div class="service-tags">
+        <span>2 semanas</span>
+        <span>Entrevistas</span>
+        <span>Mapa de procesos</span>
+        <span>Roadmap</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-n">02</div>
+      <div class="service-title">Automatización<br>de Procesos</div>
+      <div class="service-text">Conectamos tus herramientas existentes y automatizamos tareas repetitivas. Sin código innecesario, sin reemplazar a tu equipo.</div>
+      <div class="service-tags">
+        <span>Make / Zapier</span>
+        <span>Notion</span>
+        <span>APIs</span>
+        <span>Flujos inteligentes</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-n">03</div>
+      <div class="service-title">Adopción<br>de IA</div>
+      <div class="service-text">Integramos herramientas de inteligencia artificial donde realmente generan valor — sin hype, sin promesas vacías, con casos concretos para tu negocio.</div>
+      <div class="service-tags">
+        <span>ChatGPT</span>
+        <span>Claude</span>
+        <span>Agentes</span>
+        <span>Entrenamiento</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-n">04</div>
+      <div class="service-title">Workshops<br>& Formación</div>
+      <div class="service-text">Sesiones prácticas para que tu equipo entienda, use y aproveche las herramientas digitales. Aprendizaje que permanece cuando nos vamos.</div>
+      <div class="service-tags">
+        <span>Presencial / Online</span>
+        <span>Equipos 5–20p</span>
+        <span>Materiales incluidos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ HOW ════════════════════════════════════════════════════════════ -->
+<section id="how">
+  <div class="section-label reveal">Proceso</div>
+  <h2 class="section-h reveal">
+    Así trabajamos<br><em>juntos.</em>
+  </h2>
+
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="step-n">01</div>
+      <div class="step-title">Escucha y diagnóstico</div>
+      <div class="step-text">Empezamos entendiendo tu operación desde adentro. Sin supuestos. Sin plantillas genéricas.</div>
+    </div>
+    <div class="how-step reveal reveal-delay-1">
+      <div class="step-n">02</div>
+      <div class="step-title">Diseño de solución</div>
+      <div class="step-text">Proponemos un camino específico para tu empresa: qué herramientas, qué automatizaciones, qué orden.</div>
+    </div>
+    <div class="how-step reveal reveal-delay-2">
+      <div class="step-n">03</div>
+      <div class="step-title">Implementación real</div>
+      <div class="step-text">Lo construimos contigo, no para ti. Tu equipo aprende mientras lo hacemos funcionar.</div>
+    </div>
+    <div class="how-step reveal reveal-delay-3">
+      <div class="step-n">04</div>
+      <div class="step-title">Seguimiento activo</div>
+      <div class="step-text">No desaparecemos al entregar. Acompañamos los primeros meses para garantizar que todo funcione.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ RESULTS ════════════════════════════════════════════════════════ -->
+<section id="results">
+  <div class="section-label reveal">Resultados</div>
+
+  <div class="results-layout">
+    <div class="results-numbers reveal">
+      <div class="result-row">
+        <div class="result-n">60<span class="accent">%</span></div>
+        <div class="result-desc"><strong>Reducción en tareas manuales</strong> — promedio reportado por clientes en los primeros 3 meses.</div>
+      </div>
+      <div class="result-row">
+        <div class="result-n">3<span class="accent">×</span></div>
+        <div class="result-desc"><strong>Mayor velocidad operacional</strong> en procesos de ventas, onboarding y reportes internos.</div>
+      </div>
+      <div class="result-row">
+        <div class="result-n">6<span style="font-size:.5em;letter-spacing:-.02em;">sem</span></div>
+        <div class="result-desc"><strong>Tiempo promedio hasta primeros resultados</strong> — desde el diagnóstico hasta flujos activos.</div>
+      </div>
+    </div>
+
+    <div class="testimonial-stack reveal reveal-delay-1">
+      <div class="testimonial featured">
+        <div class="t-quote">
+          "LUM LAB no nos vendió tecnología — nos ayudó a entender nuestra operación de forma que nunca habíamos visto. El cambio fue real."
+        </div>
+        <div class="t-source">
+          <div class="t-avatar">CM</div>
+          <div>
+            <div class="t-name">Carlos Mendoza</div>
+            <div>Director General · Distribuidora Norteña</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-quote">
+          "En 4 semanas automatizamos el seguimiento de clientes. Ahora mi equipo se enfoca en vender, no en llenar hojas de Excel."
+        </div>
+        <div class="t-source">
+          <div class="t-avatar" style="background:var(--pink);color:white;">AR</div>
+          <div>
+            <div class="t-name">Ana Reyes</div>
+            <div>Fundadora · Studio Reyes Moda</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-quote">
+          "El workshop de IA fue la primera vez que mi equipo entendió de verdad qué puede hacer y qué no puede hacer la tecnología."
+        </div>
+        <div class="t-source">
+          <div class="t-avatar" style="background:var(--green);color:white;">JV</div>
+          <div>
+            <div class="t-name">Jorge Villanueva</div>
+            <div>CEO · Constructora VH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ ABOUT ═══════════════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-layout">
+    <div class="about-text-block">
+      <div class="section-label reveal">Sobre LUM LAB</div>
+      <h2 class="about-h reveal">
+        Somos el<br>equipo que<br><em>faltaba.</em>
+      </h2>
+      <p class="about-p reveal reveal-delay-1">
+        LUM LAB nació de una frustración simple: las empresas medianas merecen el mismo acceso a tecnología práctica que tienen las grandes — sin los precios de las grandes consultoras.
+      </p>
+      <p class="about-p reveal reveal-delay-1">
+        Somos un equipo pequeño, multidisciplinario y con experiencia en tecnología, operaciones y diseño de sistemas. Trabajamos desde la Ciudad de México con clientes en toda la república.
+      </p>
+
+      <div class="about-values reveal reveal-delay-2">
+        <div class="about-value">
+          <div class="av-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="6" stroke="#1C1B18" stroke-width="1"/>
+              <circle cx="7" cy="7" r="2" fill="#E8366A"/>
+            </svg>
+          </div>
+          <div class="av-text"><strong>Centrados en las personas</strong> — la tecnología es el medio, no el fin.</div>
+        </div>
+        <div class="about-value">
+          <div class="av-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="1" width="12" height="12" stroke="#1C1B18" stroke-width="1"/>
+              <line x1="1" y1="7" x2="13" y2="7" stroke="#E8366A" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="av-text"><strong>Prácticos antes que teóricos</strong> — nada que no puedas implementar esta semana.</div>
+        </div>
+        <div class="about-value">
+          <div class="av-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 12 L7 2 L12 12" stroke="#1C1B18" stroke-width="1" fill="none"/>
+              <line x1="4" y1="9" x2="10" y2="9" stroke="#E8366A" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="av-text"><strong>Transparentes siempre</strong> — precios claros, plazos reales, sin sorpresas.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual reveal reveal-delay-2">
+      <!-- Large abstract mark SVG -->
+      <svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer dashed ring -->
+        <circle cx="180" cy="180" r="160" stroke="#1C1B18" stroke-width="1" stroke-dasharray="6 6" opacity=".25"/>
+        <!-- mid ring -->
+        <circle cx="180" cy="180" r="110" stroke="#1C1B18" stroke-width="0.8" opacity=".15"/>
+        <!-- inner ring -->
+        <circle cx="180" cy="180" r="60" stroke="#1C1B18" stroke-width="1" opacity=".2"/>
+
+        <!-- main arcs - bold -->
+        <path d="M180 20 A160 160 0 0 1 340 180" stroke="#1C1B18" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M340 180 A160 160 0 0 1 180 340" stroke="#1C1B18" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- lighter arcs -->
+        <path d="M180 340 A160 160 0 0 1 20 180" stroke="#1C1B18" stroke-width="1" fill="none" stroke-linecap="round" opacity=".3"/>
+        <path d="M20 180 A160 160 0 0 1 180 20" stroke="#1C1B18" stroke-width="1" fill="none" stroke-linecap="round" opacity=".3"/>
+
+        <!-- crosshair -->
+        <line x1="180" y1="0" x2="180" y2="360" stroke="#1C1B18" stroke-width="0.5" opacity=".1"/>
+        <line x1="0" y1="180" x2="360" y2="180" stroke="#1C1B18" stroke-width="0.5" opacity=".1"/>
+        <!-- diagonal -->
+        <line x1="0" y1="0" x2="360" y2="360" stroke="#1C1B18" stroke-width="0.4" opacity=".06"/>
+        <line x1="360" y1="0" x2="0" y2="360" stroke="#1C1B18" stroke-width="0.4" opacity=".06"/>
+
+        <!-- tick marks -->
+        <line x1="180" y1="20" x2="180" y2="38" stroke="#1C1B18" stroke-width="2"/>
+        <line x1="340" y1="180" x2="322" y2="180" stroke="#1C1B18" stroke-width="2"/>
+        <line x1="180" y1="340" x2="180" y2="322" stroke="#1C1B18" stroke-width="1" opacity=".4"/>
+        <line x1="20" y1="180" x2="38" y2="180" stroke="#1C1B18" stroke-width="1" opacity=".4"/>
+
+        <!-- small node dots on rings -->
+        <circle cx="270" cy="50" r="3" fill="#1C1B18" opacity=".2"/>
+        <circle cx="310" cy="270" r="3" fill="#1C1B18" opacity=".2"/>
+        <circle cx="90" cy="310" r="3" fill="#1C1B18" opacity=".2"/>
+        <circle cx="50" cy="90" r="3" fill="#1C1B18" opacity=".2"/>
+
+        <!-- center dot — ACCENT -->
+        <circle cx="180" cy="180" r="12" fill="#E8366A"/>
+        <circle cx="180" cy="180" r="6" fill="#F7F4EE"/>
+
+        <!-- wordmark inside -->
+        <text x="180" y="215" text-anchor="middle" font-family="'DM Sans',sans-serif" font-weight="200" font-size="11" letter-spacing="6" fill="#1C1B18" opacity=".5">LUM / LAB</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CTA ════════════════════════════════════════════════════════════ -->
+<section id="cta">
+  <div class="cta-bg">
+    <svg width="800" height="800" viewBox="0 0 800 800" fill="none">
+      <circle cx="400" cy="400" r="380" stroke="white" stroke-width="1" stroke-dasharray="8 8"/>
+      <circle cx="400" cy="400" r="260" stroke="white" stroke-width="0.5"/>
+      <circle cx="400" cy="400" r="140" stroke="white" stroke-width="0.5"/>
+      <line x1="400" y1="20" x2="400" y2="780" stroke="white" stroke-width="0.5"/>
+      <line x1="20" y1="400" x2="780" y2="400" stroke="white" stroke-width="0.5"/>
+    </svg>
+  </div>
+
+  <h2 class="cta-h reveal">
+    ¿Lista para<br><em>simplificar?</em>
+  </h2>
+  <p class="cta-sub reveal reveal-delay-1">
+    Agenda una llamada de 30 minutos sin costo. Escuchamos tu operación y te decimos honestamente qué podemos hacer juntos.
+  </p>
+  <div class="cta-form reveal reveal-delay-2">
+    <input class="cta-input" type="email" placeholder="tu@empresa.com">
+    <button class="cta-submit">Escribirnos</button>
+  </div>
+  <p class="cta-note reveal reveal-delay-3">Sin compromisos · Respuesta en menos de 24 horas</p>
+</section>
+
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="nl">LUM</span>
+        <span class="ns">/</span>
+        <span class="nb">LAB</span>
+        <span class="nd"></span>
+      </div>
+      <p class="footer-desc">Innovation Studio para pequeñas y medianas empresas. Ciudad de México.</p>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Servicios</div>
+      <div class="footer-links">
+        <a href="#">Diagnóstico Operacional</a>
+        <a href="#">Automatización</a>
+        <a href="#">Adopción de IA</a>
+        <a href="#">Workshops</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <div class="footer-links">
+        <a href="#">Sobre nosotros</a>
+        <a href="#">Casos de éxito</a>
+        <a href="#">Blog</a>
+        <a href="#">Trabaja con nosotros</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <div class="footer-links">
+        <a href="#">hola@lumlab.studio</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+        <a href="#">+52 55 0000 0000</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 LUM LAB Innovation Studio</span>
+    <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--sand-mid);">Tecnología para quienes construyen.</span>
+  </div>
+</footer>
+
+
+<script>
+// ── CURSOR
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,input').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ── NAV scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── REVEAL on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => observer.observe(el));
+
+// ── CTA form
+document.querySelector('.cta-submit').addEventListener('click', () => {
+  const input = document.querySelector('.cta-input');
+  if (input.value.includes('@')) {
+    input.value = '';
+    input.placeholder = '¡Gracias! Te escribimos pronto ✦';
+    input.style.color = 'var(--sand)';
+  }
+});
+</script>
+</body>
+</html>
